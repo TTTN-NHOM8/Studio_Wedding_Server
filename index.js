@@ -12,6 +12,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api', exampleRouter);
 
 
+
+
+
+
+
+
+
 const port = 3000 || process.env.DB_PORT;
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
