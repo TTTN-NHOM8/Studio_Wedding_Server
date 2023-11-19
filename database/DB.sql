@@ -75,7 +75,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `db_wedding`.`sanpham`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_wedding`.`sanpham` (
-  `idSanPham` INT NOT NULL,
+  `idSanPham` INT NOT NULL AUTO_INCREMENT,
   `tenSanPham` TEXT NOT NULL,
   `anhSanPham` TEXT NOT NULL,
   `giaThue` FLOAT NOT NULL,
