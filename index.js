@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const app = express();
 const exampleRouter = require('./routers/example.router.js');
 
+const routeContract=require('./routers/route-contract.js');
+
 // body-parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -11,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Router
 app.use('/api', exampleRouter);
 
+app.use('/api',routeContract);
 
 
 
