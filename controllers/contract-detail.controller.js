@@ -21,6 +21,17 @@ const getContractDetailsByContractID = async (req, res) => {
   }
 }
 
+// Lấy tất cả danh sách HĐCT với mã HĐ tạm thời từ database
+const getContractDetailsByContractIDTemporary = async (req, res) => {
+  const contractIDTemporary = req.params.contractIDTemporary;
+  try {
+    const contractDetails = await contractDetailModel.getContractDetailsByContractIDTemporary(contractIDTemporary);
+    res.json(contractDetails);
+  } catch (error) {
+    console.error('Get Contract Details By Contract ID Failed Temporary', error);
+  }
+}
+
 // Thêm mới HĐCT với gói sản phẩm 
 const insertContractDetailWithProduct = async (req, res) => {
   const { contractDetailID, dateOfHire, dateOfReturn, productID, contractIDTemporary } = req.body;
@@ -141,13 +152,36 @@ const removeContractDetail = async (req, res) => {
   }
 }
 
+// Lấy tất cả danh sách dịch vụ
+const getServices = async (req, res) => {
+  try {
+    const services = await contractDetailModel.getServices();
+    res.json(services);
+  } catch (error) {
+    console.error('Get Contract Details Failed', error);
+  }
+}
+
+// Lấy danh sách sản phẩm ở trạng thái sẵn sàng
+const getProductsByStatusReady = async (req, res) => {
+  try {
+    const products = await contractDetailModel.getProductsByStatusReady();
+    res.json(products);
+  } catch (error) {
+    console.error('Get Contract Details Failed', error);
+  }
+}
+
 module.exports = {
   getContractDetails,
   getContractDetailsByContractID,
+  getContractDetailsByContractIDTemporary,
   insertContractDetailWithProduct,
   insertContractDetailWithService,
   updateContractDetailContractID,
   updateContractDetailWithProduct,
   updateContractDetailWithService,
-  removeContractDetail
+  removeContractDetail,
+  getServices,
+  getProductsByStatusReady
 }
