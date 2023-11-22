@@ -2,7 +2,11 @@ const db = require('../database/database');
 
 // Lấy tất cả danh sách HĐCT từ database
 const getContractDetails = async () => {
-  const query = `SELECT * FROM hopdongchitiet`;
+  const query = `SELECT hdct.*, sp.tenSanPham, sp.giaThue AS giaThueSanPham, dv.tenDichVu, dv.giaThue AS giaThueDichVu
+  FROM hopdongchitiet hdct
+  LEFT JOIN sanpham sp ON hdct.idSanPham = sp.idSanPham
+  LEFT JOIN dichvu dv ON hdct.idDichVu = dv.idDichVu;
+  `;
   return db.queryDatabase(query, []);
 }
 
@@ -14,24 +18,26 @@ const getContractDetailsByContractID = async (contractID) => {
 
 // Thêm mới HĐCT với gói sản phẩm vào database
 const insertContractDetailWithProduct = async (data) => {
-  const query = `INSERT INTO hopdongchitiet (idHopDongChiTiet, ngayThue, ngayTra, idSanPham) VALUES (?, ?, ?, ?);`;
+  const query = `INSERT INTO hopdongchitiet (idHopDongChiTiet, ngayThue, ngayTra, idSanPham, idHDTamThoi) VALUES (?, ?, ?, ?, ?);`;
   const values = [
     data.contractDetailID,
     data.dateOfHire,
     data.dateOfReturn,
-    data.productID
+    data.productID,
+    data.contractIDTemporary
   ];
   return await db.queryDatabase(query, values);
 }
 
 // Thêm mới HĐCT với gói dịch vụ vào database
 const insertContractDetailWithService = async (data) => {
-  const query = `INSERT INTO hopdongchitiet (idHopDongChiTiet, diaDiem, ngayThucHien, idDichVu) VALUES (?, ?, ?, ?)`;
+  const query = `INSERT INTO hopdongchitiet (idHopDongChiTiet, diaDiem, ngayThucHien, idDichVu, idHDTamThoi) VALUES (?, ?, ?, ?, ?)`;
   const values = [
     data.contractDetailID,
     data.location,
     data.dateOfPerform,
-    data.serviceID
+    data.serviceID,    
+    data.contractIDTemporary
   ];
   return await db.queryDatabase(query, values);
 }

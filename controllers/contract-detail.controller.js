@@ -23,32 +23,36 @@ const getContractDetailsByContractID = async (req, res) => {
 
 // Thêm mới HĐCT với gói sản phẩm 
 const insertContractDetailWithProduct = async (req, res) => {
-  const { contractDetailID, dateOfHire, dateOfReturn, productID } = req.body;
+  const { contractDetailID, dateOfHire, dateOfReturn, productID, contractIDTemporary } = req.body;
   try {
     await contractDetailModel.insertContractDetailWithProduct({
       contractDetailID,
       dateOfHire,
       dateOfReturn,
-      productID
+      productID,
+      contractIDTemporary
     });
     res.json({ status: 'success' });
   } catch (error) {
+    res.json({ status: 'error' });
     console.error('Insert Contract Detail With Product Failed', error);
   }
 }
 
 // Thêm mới HĐCT với gói dịch vụ 
 const insertContractDetailWithService = async (req, res) => {
-  const { contractDetailID, location, dateOfPerform, serviceID } = req.body;
+  const { contractDetailID, location, dateOfPerform, serviceID, contractIDTemporary } = req.body;
   try {
     await contractDetailModel.insertContractDetailWithService({
       contractDetailID,
       location,
       dateOfPerform,
-      serviceID
+      serviceID,
+      contractIDTemporary
     });
     res.json({ status: 'success' });
   } catch (error) {
+    res.json({ status: 'error' });
     console.error('Insert Contract Detail With Service Failed', error);
   }
 }
@@ -69,6 +73,7 @@ const updateContractDetailContractID = async (req, res) => {
       res.json({ status: 'failure' });
     }
   } catch (error) {
+    res.json({ status: 'error' });
     console.error('Update Contract Detail Contract ID Failed', error);
   }
 }
@@ -91,6 +96,7 @@ const updateContractDetailWithProduct = async (req, res) => {
       res.json({ status: 'failure', rs: updateResults });
     }
   } catch (error) {
+    res.json({ status: 'error' });
     console.error('Update Contract Detail With Product Failed', error);
   }
 }
@@ -109,11 +115,12 @@ const updateContractDetailWithService = async (req, res) => {
     });
 
     if (updateResults.changedRows > 0) {
-      res.json({ status: 'success', rs: updateResults });
+      res.json({ status: 'success' });
     } else {
-      res.json({ status: 'failure', rs: updateResults });
+      res.json({ status: 'failure' });
     }
   } catch (error) {
+    res.json({ status: 'error' });
     console.error('Update Contract Detail With Service Failed', error);
   }
 }
