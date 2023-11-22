@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `db_wedding`.`dichvu` (
   `hienThi` INT NOT NULL DEFAULT '1',
   PRIMARY KEY (`idDichVu`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -35,13 +36,14 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `db_wedding`.`khachhang`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_wedding`.`khachhang` (
-  `idKhachHang` INT NOT NULL,
+  `idKhachHang` INT NOT NULL AUTO_INCREMENT,
   `tenKhachHang` TEXT NOT NULL,
   `dienThoai` TEXT NOT NULL,
   `hienThi` INT NOT NULL DEFAULT '1',
   `diaChi` TEXT NOT NULL,
   PRIMARY KEY (`idKhachHang`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 11
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -84,6 +86,7 @@ CREATE TABLE IF NOT EXISTS `db_wedding`.`sanpham` (
   `loaiSanPham` ENUM('Cô Dâu', 'Chú Rể') NOT NULL,
   PRIMARY KEY (`idSanPham`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 11
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -101,6 +104,7 @@ CREATE TABLE IF NOT EXISTS `db_wedding`.`hopdongchitiet` (
   `idDichVu` INT NULL DEFAULT NULL,
   `idSanPham` INT NULL DEFAULT NULL,
   `idHopDong` VARCHAR(255) NULL DEFAULT NULL,
+  `idHDTamThoi` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`idHopDongChiTiet`),
   INDEX `fk_HopDongChiTiet_DichVu_idx` (`idDichVu` ASC) VISIBLE,
   INDEX `fk_HopDongChiTiet_SanPham1_idx` (`idSanPham` ASC) VISIBLE,
