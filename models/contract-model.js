@@ -2,7 +2,7 @@ const db = require('../database/database');
 
 // lấy tất cả hợp đồng
 const getContracts = async () => {
-    const query = `SELECT h.*, k.* FROM hopdong h JOIN khachhang k ON h.idKhachHang = k.idKhachHang WHERE h.hienThi=1`;
+    const query = `SELECT h.*, k.* FROM hopdong h JOIN khachhang k ON h.idKhachHang = k.idKhachHang WHERE h.hienThi=1 ORDER BY h.ngayTao DESC`;
     return db.queryDatabase(query, []);
 }
 
@@ -100,6 +100,18 @@ const deleteIncurrent=async(data)=>{
     ];
     return await db.queryDatabase(query, updateValues);    
 }
+// lấy danh sách khách hàng
+const getClients = async () => {
+    const query = `SELECT * FROM khachhang WHERE hienThi=1`;
+    return db.queryDatabase(query, []);
+}
+// lấy danh sách khách hàng
+const getDetailContractByIdHDTT = async (idHDTamThoi) => {
+    const query = `SELECT t.*, d.tenDichVu, d.giaThue AS giaThueDichVu, p.tenSanPham, p.giaThue AS giaThueSanPham
+    FROM hopdongchitiet t LEFT JOIN dichvu d ON d.idDichVu =  t.idDichVu 
+    LEFT JOIN sanpham p ON p.idSanPham=t.idSanPham WHERE idHDTamThoi=?`;
+    return db.queryDatabase(query, [idHDTamThoi]);
+}
 
 module.exports = {
     getContracts,
@@ -112,5 +124,7 @@ module.exports = {
     insertIncurrent,
     updateContract,
     deleteContract,
-    deleteIncurrent
+    deleteIncurrent,
+    getClients,
+    getDetailContractByIdHDTT
   }
