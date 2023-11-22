@@ -15,11 +15,17 @@ const removeBanner = async (bannerID) => {
   const query = `UPDATE Banner SET hienThi = 0 WHERE id = ?`;
   return await database.queryDatabase(query, [bannerID]);
 }
+const getUsersAccount = async () => {
+  const query = `SELECT * FROM nhanvien`;
+  return await database.queryDatabase(query, []);
+}
+
 
 module.exports = {
   getBanners,
   insertBanner,
-  removeBanner
+  removeBanner,
+  getUsersAccount
 }
 
 // Controller
