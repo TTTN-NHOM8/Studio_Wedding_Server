@@ -10,6 +10,7 @@ router.put('/contract-details/:contractIDTemporary/contract', contractDetailCont
 router.put('/contract-details/:contractDetailID/with-product', contractDetailController.updateContractDetailWithProduct);
 router.put('/contract-details/:contractDetailID/with-service', contractDetailController.updateContractDetailWithService);
 router.delete('/contract-details/:contractIDTemporary', contractDetailController.removeContractDetailByContractIDTemporary);
+router.delete('/contract-details/:contractDetailID/single', contractDetailController.removeContractDetailByContractDetailID);
 
 // Router liên quan
 router.get('/contract-details-services', contractDetailController.getServices);

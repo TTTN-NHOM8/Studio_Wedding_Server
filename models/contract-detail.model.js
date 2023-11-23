@@ -86,12 +86,17 @@ const updateContractDetailWithService = async (data) => {
   return await db.queryDatabase(query, values);
 }
 
-// Xoá HĐCT theo mã HĐCT
+// Xoá HĐCT theo mã HĐ tạm thời
 const removeContractDetailByContractIDTemporary = async (contractIDTemporary) => {
   const query = `DELETE FROM hopdongchitiet WHERE idHDTamThoi =?`;
   return db.queryDatabase(query, [contractIDTemporary]);
 }
 
+// Xoá HĐCT theo mã HĐCT
+const removeContractDetailByContractDetailID = async (contractDetailID) => {
+  const query = `DELETE FROM hopdongchitiet WHERE idHopDongChiTiet =?`;
+  return db.queryDatabase(query, [contractDetailID]);
+}
 // Lấy danh sách dịch vụ
 const getServices = async () => {
   const query = `SELECT * FROM dichvu WHERE hienThi = 1;`;
@@ -114,6 +119,7 @@ module.exports = {
   updateContractDetailWithProduct,
   updateContractDetailWithService,
   removeContractDetailByContractIDTemporary,
+  removeContractDetailByContractDetailID,
   getServices,
   getProductsByStatusReady
 }

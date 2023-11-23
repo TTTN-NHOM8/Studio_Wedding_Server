@@ -152,6 +152,22 @@ const removeContractDetailByContractIDTemporary = async (req, res) => {
   }
 }
 
+// Xoá HĐCT theo mã HĐCT
+const removeContractDetailByContractDetailID = async (req, res) => {
+  try {
+    const contractDetailID = req.params.contractDetailID;
+    const results = await contractDetailModel.removeContractDetailByContractDetailID(contractDetailID);
+
+    if (results.affectedRows > 0) {
+      res.json({ status: 'success' });
+    } else {
+      res.json({ status: 'failure' });
+    }
+  } catch (error) {
+    console.error('Delete Contract Detail Failed', error);
+  }
+}
+
 // Lấy tất cả danh sách dịch vụ
 const getServices = async (req, res) => {
   try {
@@ -182,6 +198,7 @@ module.exports = {
   updateContractDetailWithProduct,
   updateContractDetailWithService,
   removeContractDetailByContractIDTemporary,
+  removeContractDetailByContractDetailID,
   getServices,
   getProductsByStatusReady
 }
