@@ -74,8 +74,8 @@ const updateContractDetailContractID = async (req, res) => {
   const contractID = req.body.idHopDong;
   try {
     const updateResults = await contractDetailModel.updateContractDetailContractID({
-      contractIDTemporary,
-      contractID
+      contractID,
+      contractIDTemporary
     });
 
 
