@@ -46,18 +46,18 @@ const insertContractDetailWithService = async (data) => {
     data.contractDetailID,
     data.location,
     data.dateOfPerform,
-    data.serviceID,    
+    data.serviceID,
     data.contractIDTemporary
   ];
   return await db.queryDatabase(query, values);
 }
 
-// Cập nhật mã hợp đồng cho HĐCT
+// Cập nhật mã hợp đồng cho HĐCT theo mã HĐ tạm thời
 const updateContractDetailContractID = async (data) => {
-  const query = `UPDATE hopdongchitiet SET idHopDong = ? WHERE idHopDongChiTiet = ?`;
+  const query = `UPDATE hopdongchitiet SET idHopDong = ? WHERE idHDTamThoi = ?`;
   const values = [
     data.contractID,
-    data.contractDetailID
+    data.contractIDTemporary
   ];
   return await db.queryDatabase(query, values);
 }
@@ -87,9 +87,9 @@ const updateContractDetailWithService = async (data) => {
 }
 
 // Xoá HĐCT theo mã HĐCT
-const removeContractDetail = async (contractDetailID) => {
-  const query = `DELETE FROM hopdongchitiet WHERE idHopDongChiTiet =? `;
-  return db.queryDatabase(query, [contractDetailID]);
+const removeContractDetailByContractIDTemporary = async (contractIDTemporary) => {
+  const query = `DELETE FROM hopdongchitiet WHERE idHDTamThoi =?`;
+  return db.queryDatabase(query, [contractIDTemporary]);
 }
 
 // Lấy danh sách dịch vụ
@@ -113,7 +113,7 @@ module.exports = {
   updateContractDetailContractID,
   updateContractDetailWithProduct,
   updateContractDetailWithService,
-  removeContractDetail,
+  removeContractDetailByContractIDTemporary,
   getServices,
   getProductsByStatusReady
 }
