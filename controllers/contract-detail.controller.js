@@ -71,17 +71,19 @@ const insertContractDetailWithService = async (req, res) => {
 // Cập nhật mã hợp đồng cho HĐCT theo mã HĐ tạm thời
 const updateContractDetailContractID = async (req, res) => {
   const contractIDTemporary = req.params.contractIDTemporary;
-  const contractID = req.body.contractID;
+  const contractID = req.body.idHopDong;
   try {
     const updateResults = await contractDetailModel.updateContractDetailContractID({
-      contractID,
-      contractIDTemporary
+      contractIDTemporary,
+      contractID
     });
+
 
     if (updateResults.changedRows > 0) {
       res.json({ status: 'success' });
     } else {
       res.json({ status: 'failure' });
+
     }
   } catch (error) {
     res.json({ status: 'error' });
@@ -144,8 +146,11 @@ const removeContractDetailByContractIDTemporary = async (req, res) => {
 
     if (results.affectedRows > 0) {
       res.json({ status: 'success' });
+      console.log('Success');
     } else {
       res.json({ status: 'failure' });
+      console.log('failed');
+
     }
   } catch (error) {
     console.error('Delete Contract Detail Failed', error);
