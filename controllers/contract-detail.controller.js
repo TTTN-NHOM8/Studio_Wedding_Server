@@ -68,14 +68,14 @@ const insertContractDetailWithService = async (req, res) => {
   }
 }
 
-// Cập nhật mã hợp đồng cho HĐCT
+// Cập nhật mã hợp đồng cho HĐCT theo mã HĐ tạm thời
 const updateContractDetailContractID = async (req, res) => {
-  const contractDetailID = req.params.contractDetailID;
+  const contractIDTemporary = req.params.contractIDTemporary;
   const contractID = req.body.contractID;
   try {
     const updateResults = await contractDetailModel.updateContractDetailContractID({
       contractID,
-      contractDetailID
+      contractIDTemporary
     });
 
     if (updateResults.changedRows > 0) {
@@ -112,7 +112,6 @@ const updateContractDetailWithProduct = async (req, res) => {
   }
 }
 
-
 // Cập nhật HĐCT với gói dịch vụ
 const updateContractDetailWithService = async (req, res) => {
   const contractDetailID = req.params.contractDetailID;
@@ -136,11 +135,12 @@ const updateContractDetailWithService = async (req, res) => {
   }
 }
 
-// Xoá HĐCT theo mã HĐCT
-const removeContractDetail = async (req, res) => {
+// Xoá HĐCT theo mã HĐ tạm thời
+const removeContractDetailByContractIDTemporary = async (req, res) => {
   try {
-    const contractDetailID = req.params.contractDetailID;
-    const results = await contractDetailModel.removeContractDetail(contractDetailID);
+    const contractIDTemporary = req.params.contractIDTemporary;
+    console.log("🚀 ~ file: contract-detail.controller.js:142 ~ removeContractDetailByContractIDTemporary ~ contractIDTemporary:", contractIDTemporary)
+    const results = await contractDetailModel.removeContractDetailByContractIDTemporary(contractIDTemporary);
 
     if (results.affectedRows > 0) {
       res.json({ status: 'success' });
@@ -181,7 +181,7 @@ module.exports = {
   updateContractDetailContractID,
   updateContractDetailWithProduct,
   updateContractDetailWithService,
-  removeContractDetail,
+  removeContractDetailByContractIDTemporary,
   getServices,
   getProductsByStatusReady
 }
