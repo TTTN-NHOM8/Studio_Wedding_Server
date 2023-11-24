@@ -128,7 +128,7 @@ const updateContract = async (req, res) => {
 // Xoá hợp đồng
 const deleteContract = async (req, res) => {
   const idHopDong = req.params.idHopDong;
-  const hienThi = 1;
+  const hienThi = 0;
   try {
     const updateResults = await contractModel.deleteContract({
       hienThi,
@@ -149,7 +149,7 @@ const deleteContract = async (req, res) => {
 //   Xoá phát sinh
 const deleteIncurrent = async (req, res) => {
   const idPhatSinh = req.params.idPhatSinh;
-  const hienThi = 1;
+  const hienThi = 0;
   try {
     const updateResults = await contractModel.deleteIncurrent({
       hienThi,

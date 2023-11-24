@@ -71,17 +71,19 @@ const insertContractDetailWithService = async (req, res) => {
 // Cập nhật mã hợp đồng cho HĐCT theo mã HĐ tạm thời
 const updateContractDetailContractID = async (req, res) => {
   const contractIDTemporary = req.params.contractIDTemporary;
-  const contractID = req.body.contractID;
+  const contractID = req.body.idHopDong;
   try {
     const updateResults = await contractDetailModel.updateContractDetailContractID({
       contractID,
       contractIDTemporary
     });
 
+
     if (updateResults.changedRows > 0) {
       res.json({ status: 'success' });
     } else {
       res.json({ status: 'failure' });
+
     }
   } catch (error) {
     res.json({ status: 'error' });
@@ -144,6 +146,25 @@ const removeContractDetailByContractIDTemporary = async (req, res) => {
 
     if (results.affectedRows > 0) {
       res.json({ status: 'success' });
+      console.log('Success');
+    } else {
+      res.json({ status: 'failure' });
+      console.log('failed');
+
+    }
+  } catch (error) {
+    console.error('Delete Contract Detail Failed', error);
+  }
+}
+
+// Xoá HĐCT theo mã HĐCT
+const removeContractDetailByContractDetailID = async (req, res) => {
+  try {
+    const contractDetailID = req.params.contractDetailID;
+    const results = await contractDetailModel.removeContractDetailByContractDetailID(contractDetailID);
+
+    if (results.affectedRows > 0) {
+      res.json({ status: 'success' });
     } else {
       res.json({ status: 'failure' });
     }
@@ -182,6 +203,7 @@ module.exports = {
   updateContractDetailWithProduct,
   updateContractDetailWithService,
   removeContractDetailByContractIDTemporary,
+  removeContractDetailByContractDetailID,
   getServices,
   getProductsByStatusReady
 }

@@ -22,7 +22,11 @@ const getContractDetailsByContractIDTemporary = async (contractIDTemporary) => {
 
 // Lấy tất cả danh sách HĐCT từ database với mã HĐ
 const getContractDetailsByContractID = async (contractID) => {
-  const query = `SELECT * FROM hopdongchitiet WHERE idHopDong=?`;
+  const query = `SELECT hdct.*, sp.tenSanPham, sp.giaThue AS giaThueSanPham, dv.tenDichVu, dv.giaThue AS giaThueDichVu
+  FROM hopdongchitiet hdct
+  LEFT JOIN sanpham sp ON hdct.idSanPham = sp.idSanPham
+  LEFT JOIN dichvu dv ON hdct.idDichVu = dv.idDichVu
+  WHERE idHopDong = ?;`;  
   return db.queryDatabase(query, [contractID]);
 }
 
@@ -86,12 +90,17 @@ const updateContractDetailWithService = async (data) => {
   return await db.queryDatabase(query, values);
 }
 
-// Xoá HĐCT theo mã HĐCT
+// Xoá HĐCT theo mã HĐ tạm thời
 const removeContractDetailByContractIDTemporary = async (contractIDTemporary) => {
   const query = `DELETE FROM hopdongchitiet WHERE idHDTamThoi =?`;
   return db.queryDatabase(query, [contractIDTemporary]);
 }
 
+// Xoá HĐCT theo mã HĐCT
+const removeContractDetailByContractDetailID = async (contractDetailID) => {
+  const query = `DELETE FROM hopdongchitiet WHERE idHopDongChiTiet =?`;
+  return db.queryDatabase(query, [contractDetailID]);
+}
 // Lấy danh sách dịch vụ
 const getServices = async () => {
   const query = `SELECT * FROM dichvu WHERE hienThi = 1;`;
@@ -114,6 +123,7 @@ module.exports = {
   updateContractDetailWithProduct,
   updateContractDetailWithService,
   removeContractDetailByContractIDTemporary,
+  removeContractDetailByContractDetailID,
   getServices,
   getProductsByStatusReady
 }

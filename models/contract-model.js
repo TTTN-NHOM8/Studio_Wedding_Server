@@ -69,7 +69,7 @@ const insertIncurrent = async (data) => {
 
 // cập nhật hợp đồng
 const updateContract = async (data) => {
-    const query = `UPDATE hopdong SET(ngayThanhToan, giamGia, tongTien, trangThaiThanhToan,trangThaiPhatSinh) WHERE idHopDong=?`;
+    const query = `UPDATE hopdong SET ngayThanhToan = ?, giamGia = ?, tongTien = ?, trangThaiThanhToan = ?,trangThaiPhatSinh = ? WHERE idHopDong=?`;
     const updateValues = [
         data.ngayThanhToan,
         data.giamGia,
@@ -83,7 +83,7 @@ const updateContract = async (data) => {
 
 // xoá hợp đồng
 const deleteContract=async(data)=>{
-    const query = `UPDATE hopdong SET(hienThi=?) WHERE idHopDong=?`;
+    const query = `UPDATE hopdong SET hienThi=? WHERE idHopDong=?`;
     const updateValues = [
         data.hienThi,
         data.idHopDong
@@ -93,7 +93,7 @@ const deleteContract=async(data)=>{
 
 // xoá phát sinh
 const deleteIncurrent=async(data)=>{
-    const query = `UPDATE phatsinh SET(hienThi=?) WHERE idPhatSinh=?`;
+    const query = `UPDATE phatsinh SET hienThi=? WHERE idPhatSinh=?`;
     const updateValues = [
         data.hienThi,
         data.idPhatSinh
