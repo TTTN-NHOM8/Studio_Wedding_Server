@@ -14,12 +14,7 @@ const con = mysql.createConnection({
 //     console.log("Kết nối Database thành công!");
 // });
 
-/**
- *  Truy xuất dữ liệu
- * @param {*} query câu truy vấn
- * @param {*} values dữ liệu
- * @returns 
- */
+
 const queryDatabase = (query, values) => {
     return new Promise((resolve, reject) => {
         con.query(query, values, (err, results, fields) => {

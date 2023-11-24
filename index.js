@@ -2,8 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const exampleRouter = require('./routers/example.router.js');
+const accountRouters = require('./routers/account.routers.js');
 const contractDetailRouter = require('./routers/contract-detail.router.js');
-
 const routeContract=require('./routers/route-contract.js');
 
 // body-parser
@@ -17,14 +17,9 @@ app.use((req, res, next) => {
 
 // Router
 app.use('/api', exampleRouter);
+app.use('/api', accountRouters)
 app.use('/api', contractDetailRouter);
 app.use('/api',routeContract);
-
-
-
-
-
-
 
 
 const port = 3000 || process.env.DB_PORT;
