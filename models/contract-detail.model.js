@@ -22,7 +22,11 @@ const getContractDetailsByContractIDTemporary = async (contractIDTemporary) => {
 
 // Lấy tất cả danh sách HĐCT từ database với mã HĐ
 const getContractDetailsByContractID = async (contractID) => {
-  const query = `SELECT * FROM hopdongchitiet WHERE idHopDong=?`;
+  const query = `SELECT hdct.*, sp.tenSanPham, sp.giaThue AS giaThueSanPham, dv.tenDichVu, dv.giaThue AS giaThueDichVu
+  FROM hopdongchitiet hdct
+  LEFT JOIN sanpham sp ON hdct.idSanPham = sp.idSanPham
+  LEFT JOIN dichvu dv ON hdct.idDichVu = dv.idDichVu
+  WHERE idHopDong = ?;`;  
   return db.queryDatabase(query, [contractID]);
 }
 
