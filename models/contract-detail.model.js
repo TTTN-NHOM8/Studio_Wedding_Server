@@ -113,6 +113,12 @@ const getProductsByStatusReady = async () => {
   return db.queryDatabase(query, []);
 }
 
+// Thêm công việc cho hợp đồng với gói dịch vụ
+const insertTaskWithContractDetailService = async (contractDetailID) => {
+  const query = `INSERT INTO congviec (trangThaiCongViec, idHDCT) VALUES ('Đang thực hiện', ?)`;
+  return await db.queryDatabase(query, [contractDetailID]);
+}
+
 module.exports = {
   getContractDetails,
   getContractDetailsByContractID,
@@ -125,5 +131,6 @@ module.exports = {
   removeContractDetailByContractIDTemporary,
   removeContractDetailByContractDetailID,
   getServices,
-  getProductsByStatusReady
+  getProductsByStatusReady,
+  insertTaskWithContractDetailService
 }

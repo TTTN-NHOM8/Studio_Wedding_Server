@@ -61,6 +61,8 @@ const insertContractDetailWithService = async (req, res) => {
       serviceID,
       contractIDTemporary
     });
+    // Thêm công việc của dịch vụ ngay sau khi thêm HĐCt
+    await contractDetailModel.insertTaskWithContractDetailService(contractDetailID);
     res.json({ status: 'success' });
   } catch (error) {
     res.json({ status: 'error' });
