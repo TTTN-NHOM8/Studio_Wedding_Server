@@ -2,6 +2,7 @@ const database = require('../database/database.js')
 
 const readTask = async () => {
     const query = "SELECT " +
+        "c.idCongViec, " +
         "hdct.idHopDong, " +
         "MAX(ngayThucHien) AS ngayThucHien, " +
         "MAX(trangThaiCongViec) AS trangThaiCongViec, " +
@@ -15,6 +16,7 @@ const readTask = async () => {
         "LEFT JOIN db_wedding.hopdongchitiet hdct ON c.idHDCT = hdct.idHopDongChiTiet " +
         "LEFT JOIN db_wedding.dichvu d ON hdct.idDichVu = d.idDichVu " +
         "LEFT JOIN db_wedding.nhanvien nv ON t.idNhanVien = nv.idNhanVien " +
+        "WHERE c.hienThi = 1 " +
         "GROUP BY idHopDongChiTiet "
     return await database.queryDatabase(query, [])
 }
@@ -34,13 +36,27 @@ const readTaskByRole = (role) => {
         "LEFT JOIN db_wedding.hopdongchitiet hdct ON c.idHDCT = hdct.idHopDongChiTiet " +
         "LEFT JOIN db_wedding.dichvu d ON hdct.idDichVu = d.idDichVu " +
         "LEFT JOIN db_wedding.nhanvien nv ON t.idNhanVien = nv.idNhanVien " +
-        "WHERE nv.vaiTro = ?"
-    "GROUP BY idHopDongChiTiet "
+        "WHERE nv.vaiTro = ? AND c.hienThi = 1 " +
+        "GROUP BY idHopDongChiTiet "
 
     return database.queryDatabase(query, [role])
 }
 
+const deleteTask = (id) => {
+    const query = "UPDATE CongViec SET hienThi = 0 WHERE idCongViec = ?"
+    return database.queryDatabase(query, [id])
+}
+
+const updateTask = (id, statusTask) => {
+    const query = "UPDATE CongViec SET trangThaiCongViec = ? WHERE idCongViec = ?"
+    return database.queryDatabase(query, [statusTask, id])
+}
+
+
 module.exports = {
     readTask,
-    readTaskByRole
+    readTaskByRole,
+    deleteTask,
+    updateTask
+
 }
