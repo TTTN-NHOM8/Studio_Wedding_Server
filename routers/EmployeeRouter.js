@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const employee=require('../controllers/EmployyeeController');
+const employee =require('../controllers/EmployeeController');
 
 router.get('/employee', employee.getAllEmployee);
 router.post('/employee/add', employee.insertEmployee);

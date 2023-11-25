@@ -14,6 +14,8 @@ const getAllEmployee = async(req, res) =>{
 const insertEmployee = async(req, res) =>{
     const {idNhanVien, hoVaTen, ngaySinh, gioiTinh, dienThoai, diaChi, anhDaiDien, vaiTro} = req.body;
     const matKhau = "abc";
+    console.log(anhDaiDien)
+    console.log(vaiTro)
     try {
         await employeeModel.insertEmployee({
             idNhanVien,

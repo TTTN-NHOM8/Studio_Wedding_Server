@@ -6,6 +6,7 @@ const accountRouters = require('./routers/account.routers.js');
 const routeContract=require('./routers/route-contract.js');
 const contractDetailRouter = require('./routers/contract-detail.router.js');
 const taskRouter = require('./routers/task.router.js');
+const employeeRouter =require('./routers/EmployeeRouter.js');
 
 
 // body-parser
@@ -23,10 +24,11 @@ app.use('/api', accountRouters)
 app.use('/api',routeContract);
 app.use('/api', contractDetailRouter);
 app.use('/api', taskRouter);
+app.use('/api', employeeRouter);
 
 
 
-const port = 3000 || process.env.DB_PORT;
+const port = 4000 || process.env.DB_PORT;
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
