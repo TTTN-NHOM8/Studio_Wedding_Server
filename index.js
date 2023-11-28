@@ -6,6 +6,7 @@ const accountRouters = require('./routers/account.routers.js');
 const routeContract=require('./routers/route-contract.js');
 const contractDetailRouter = require('./routers/contract-detail.router.js');
 const taskRouter = require('./routers/task.router.js');
+const serviceRouter = require('./routers/service.router.js');
 
 
 // body-parser
@@ -23,6 +24,7 @@ app.use('/api', accountRouters)
 app.use('/api',routeContract);
 app.use('/api', contractDetailRouter);
 app.use('/api', taskRouter);
+app.use('/api', serviceRouter);
 
 
 

@@ -88,7 +88,6 @@ const updateContractDetailContractID = async (req, res) => {
       res.json({ status: 'success' });
     } else {
       res.json({ status: 'failure' });
-
     }
   } catch (error) {
     res.json({ status: 'error' });
