@@ -43,6 +43,9 @@ const insertContractDetailWithProduct = async (req, res) => {
       productID,
       contractIDTemporary
     });
+    // Cập nhật sản phẩm thành trạng thái "Đang thuê"
+    await contractDetailModel.updateStatusHiredIntoProductByProductID(productID);
+
     res.json({ status: 'success' });
   } catch (error) {
     res.json({ status: 'error' });
