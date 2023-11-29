@@ -33,17 +33,6 @@ const getContractById = async (req, res) => {
   }
 }
 
-// Lấy phát sinh theo idHD
-const getIncurrentByIdHD = async (req, res) => {
-  const idHopDong = req.params.idHopDong;
-  try {
-    const incurrent = await contractModel.getIncurrentByIdHD(idHopDong);
-    const Incurrent=incurrent[0];
-    res.send(Incurrent);
-  } catch (error) {
-    console.error('Error', error);
-  }
-}
 
 // Thêm mới HD
 const insertContract = async (req, res) => {
@@ -65,26 +54,8 @@ const insertContract = async (req, res) => {
     console.error('Erorr', error);
   }
 }
-// Thêm phát sinh
-const insertIncurrent = async (req, res) => {
-  const { phiPhatSinh, hanTra, noiDung, idHopDong } = req.body;
-  const hienThi = 1;
-  try {
-    await contractModel.insertIncurrent({
-      phiPhatSinh,
-      hanTra,
-      noiDung,
-      hienThi,
-      idHopDong
-    });
-    await contractModel.updateProductStatus(idHopDong)
-    res.json({ status: 'success' });
-  } catch (error) {
-    console.error('Erorr', error);
-  }
-}
 
-// Cập nhật hợp đồng
+// Cập nhật hợp đồng []
 const updateContract = async (req, res) => {
   const idHopDong = req.params.idHopDong;
   const { ngayThanhToan, giamGia, tongTien, trangThaiThanhToan, trangThaiPhatSinh } = req.body;
@@ -107,10 +78,10 @@ const updateContract = async (req, res) => {
     console.error('Errorr', error);
   }
 }
-// Cập nhật phát sinh
+// Cập nhật phát sinh[]
 const updateInCurrent = async (req, res) => {
   const idPhatSinh = req.params.idPhatSinh;
-  const { noiDung, hanTra, phiPhatSinh, idSanPham,idHopDong } = req.body;
+  const { noiDung, hanTra, phiPhatSinh, idSanPham,idHopDong,idHopDongChiTiet } = req.body;
   
   try {
       const updateResults = await contractModel.updateIncurrent({
@@ -121,14 +92,14 @@ const updateInCurrent = async (req, res) => {
       });
 
       await contractModel.updateProductStatusByID(idSanPham)
-      await contractModel.updateStatusIsOncurrentHopDong();
+      await contractModel.updateIsOncurrentStatusContractDetail(idHopDongChiTiet);
 
       if (updateResults.changedRows > 0) {
           res.json({ status: 'success' });
-          console.log('Success', noiDung, hanTra, phiPhatSinh, idPhatSinh, idSanPham);
+          console.log('Success', noiDung, hanTra, phiPhatSinh, idPhatSinh, idSanPham+idHopDongChiTiet);
       } else {
           res.json({ status: 'failed' });
-          console.log('Failed', noiDung, hanTra, phiPhatSinh, idPhatSinh, idSanPham);
+          console.log('Failed', noiDung, hanTra, phiPhatSinh, idPhatSinh, idSanPham+idHopDongChiTiet);
       }
   } catch (error) {
       console.error('Error', error);
@@ -138,7 +109,7 @@ const updateInCurrent = async (req, res) => {
 // [Xoá] cập nhật lại toàn bộ các trường bằng trong phát sinh = null 
 const updateIncurrentNone= async(req,res) => {
   const idPhatSinh = req.params.idPhatSinh;
-  const { noiDung, hanTra, phiPhatSinh, idSanPham,idHopDong } = req.body;
+  const { noiDung, hanTra, phiPhatSinh, idSanPham,idHopDong ,idHopDongChiTiet} = req.body;
   
   try {
       const updateResults = await contractModel.updateIncurrent({
@@ -148,7 +119,8 @@ const updateIncurrentNone= async(req,res) => {
           idPhatSinh
       });
       await contractModel.updateProductStatusNoneByID(idSanPham);
-      await contractModel.updateStatusIsNotOncurrentHopDong();
+      
+      await contractModel.updateIsNotOncurrentStatusContractDetail(idHopDongChiTiet);
 
       if (updateResults.changedRows > 0) {
           res.json({ status: 'success' });
@@ -184,23 +156,6 @@ const deleteContract = async (req, res) => {
   }
 }
 
-//   Xoá phát sinh
-const deleteIncurrent = async (req, res) => {
-  const idHopDong = req.params.idHopDong;
-  try {
-    const updateResults = await contractModel.deleteIncurrent(idHopDong);
-    await contractModel.updateProductStatusNoneIncurrent(idHopDong)
-    await contractModel.updateIncurrentStatusNone(idHopDong)
-
-    if (updateResults.changedRows > 0) {
-      res.json({ status: 'success' });
-    } else {
-      res.json({ status: 'failed' });
-    }
-  } catch (error) {
-    console.error('Errorr', error);
-  }
-}
 // lấy tất cả danh sách khách hàng
 const getAllClients = async (req, res) => {
   try {
@@ -241,12 +196,9 @@ const deleteTaskByidHDTamThoi = async (req, res) => {
 module.exports = {
   getContracts,
   getContractById,
-  getIncurrentByIdHD,
   insertContract,
-  insertIncurrent,
   updateContract,
   deleteContract,
-  deleteIncurrent,
   getAllClients,
   getDetailContractByIdHDTT,
   deleteTaskByidHDTamThoi,

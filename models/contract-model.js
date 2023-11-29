@@ -2,7 +2,33 @@ const db = require('../database/database');
 
 // lấy tất cả hợp đồng
 const getContracts = async () => {
-    const query = `SELECT h.*, k.* FROM hopdong h JOIN khachhang k ON h.idKhachHang = k.idKhachHang WHERE h.hienThi=1 ORDER BY h.ngayTao DESC`;
+    const query = `SELECT hd.idHopDong, hd.ngayTao, hd.ngayThanhToan, hd.tienCoc, hd.giamGia, hd.tongTien, hd.trangThaiThanhToan, hd.trangThaiHopDong, hd.hienThi, hd.idKhachHang, kh.*,
+                        COALESCE(hct.trangThaiPhatSinh, 'Không có phát sinh') AS trangThaiPhatSinh
+                    FROM
+                        hopdong hd
+                    LEFT JOIN (
+                        SELECT
+                            idHopDong,
+                            CASE
+                                WHEN COUNT(CASE WHEN trangThaiPhatSinh = 'Có phát sinh' THEN 1 END) > 0
+                                THEN 'Có phát sinh'
+                                ELSE 'Không có phát sinh'
+                            END AS trangThaiPhatSinh
+                        FROM
+                            hopdongchitiet
+                        WHERE
+                            hienThi = 1
+                            AND idHopDong IS NOT NULL
+                        GROUP BY
+                            idHopDong
+                    ) hct ON hd.idHopDong = hct.idHopDong
+
+                    JOIN khachhang kh ON hd.idKhachHang=kh.idKhachHang
+                    WHERE
+                        hd.hienThi = 1
+                        AND hct.idHopDong IS NOT NULL
+                        AND hct.trangThaiPhatSinh IS NOT NULL
+                    ORDER BY hd.ngayTao DESC`;
     return db.queryDatabase(query, []);
 }
 
@@ -54,7 +80,7 @@ const updateHopDongStatus = async (idHopDong) => {
     const updateValues = [idHopDong];
     return await db.queryDatabase(updateQuery, updateValues);
 };
-
+ 
 // cập nhật hợp đồng
 const updateContract = async (data) => {
     const query = `UPDATE hopdong SET ngayThanhToan = ?, giamGia = ?, tongTien = ?, trangThaiThanhToan = ?,trangThaiPhatSinh = ? WHERE idHopDong=?`;
@@ -97,7 +123,7 @@ const getDetailContractByIdHDTT = async (idHDTamThoi) => {
     return db.queryDatabase(query, [idHDTamThoi]);
 }
 
-// Xoá công việc 
+// Xoá công việc khi không lưu hợp đồng
 const deleteTaskByidHDTamThoi= async (idHDTamThoi)=>{
     const query=`DELETE FROM congviec
     WHERE idHDCT IN (
@@ -215,6 +241,20 @@ const updateStatusIsNotOncurrentHopDong= async ()=>{
     return db.queryDatabase(query,[]);
 
 }
+
+// Thêm trạng thái phát sinh trong HDCT
+const updateIsOncurrentStatusContractDetail = async (idHopDongChiTiet)=>{
+    const query=`UPDATE hopdongchitiet SET trangThaiPhatSinh = 'Có phát sinh'
+    WHERE idHopDongChiTiet =?;`;
+    return db.queryDatabase(query,[idHopDongChiTiet]);
+}
+
+// Xoá trạng thái phát sinh trong HDCT
+const updateIsNotOncurrentStatusContractDetail = async (idHopDongChiTiet)=>{
+    const query=`UPDATE hopdongchitiet SET trangThaiPhatSinh = 'Không có phát sinh'
+    WHERE idHopDongChiTiet =?;`;
+    return db.queryDatabase(query,[idHopDongChiTiet]);
+}
 module.exports = {
     getContracts,
     getContractById,
@@ -240,15 +280,8 @@ module.exports = {
     updateProductStatusByID,
     updateProductStatusNoneByID,
     updateStatusIsOncurrentHopDong,
-    updateStatusIsNotOncurrentHopDong
+    updateStatusIsNotOncurrentHopDong,
+    updateIsOncurrentStatusContractDetail,
+    updateIsNotOncurrentStatusContractDetail
 
   }
-
-//   UPDATE hopdong hd
-//   JOIN hopdongchitiet hdct ON hd.idHopDong = hdct.idHopDong
-//   LEFT JOIN phatsinh ps ON hdct.idHopDongChiTiet = ps.idHopDongChiTiet
-//   SET hd.trangThaiPhatSinh = CASE
-//       WHEN COUNT(ps.idPhatSinh) > 0 THEN 'Có phát sinh'
-//       ELSE 'Không có phát sinh'
-//   END
-//   WHERE hdct.idHopDong = ?'  

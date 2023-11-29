@@ -44,6 +44,7 @@ const insertContractDetailWithProduct = async (req, res) => {
       productID,
       contractIDTemporary
     });
+    // thêm phát sinh liên quan đến sản phẩm khi thêm HĐCT với sản phẩm 
     await contracModel.insertNewIncurrent({contractDetailID,productID});
     res.json({ status: 'success' });
   } catch (error) {
@@ -146,7 +147,9 @@ const removeContractDetailByContractIDTemporary = async (req, res) => {
   try {
     const contractIDTemporary = req.params.contractIDTemporary;
     console.log("🚀 ~ file: contract-detail.controller.js:142 ~ removeContractDetailByContractIDTemporary ~ contractIDTemporary:", contractIDTemporary)
+    // xoá phát sinh khi không lưu hợp đồng
     const deleteIncurrentResult= await contracModel.deletePhatSinhByContractIDTemporary(contractIDTemporary);
+  
     const results = await contractDetailModel.removeContractDetailByContractIDTemporary(contractIDTemporary);
 
     if (results.affectedRows > 0 && deleteIncurrentResult>0) {
