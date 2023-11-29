@@ -1,59 +1,77 @@
 const productModel = require('../models/product-model');
-
-// Lấy tất cả danh sách Sản phẩm 
-const getProduct = async (req, res) => {
+// Hàm lấy tất cả sản phẩm
+const getAllProducts = async (req, res) => {
   try {
-    const Product = await productModel.getContracts();
-    res.json(Product);
+    const products = await productModel.getAllProducts();
+    res.json(products);
   } catch (error) {
-    console.error('Error', error);
+    console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
+    res.status(500).send('Lỗi server');
   }
-}
+};
 
-// Lấy SP by IDSP
+// Hàm lấy một sản phẩm theo idSanPham
 const getProductById = async (req, res) => {
-  const idSanPham = req.params.idSanPham;
-  try {
-    const product = await productModel.getContractById(idSanPham);
-    res.json(product);
-  } catch (error) {
-    console.error('Error', error);
-  }
-}
-// Lấy danh sách SP by trangThaiTT
-const getProductByPayment = async (req, res) => {
-  const trangThai = req.params.trangThai;
-  try {
-    const product = await productModel.getProductByPayment(trangThai);
-    res.json(product);
-  } catch (error) {
-    console.error('Error', error);
-  }
-}
+  const { idSanPham } = req.params;
 
-// Xoá Sản Phẩm
-const deleteProduct = async (req, res) => {
-  const idSanPham = req.params.idSanPham;
-  const hienThi = 1;
   try {
-    const updateResults = await productModel.deleteProduct({
-      hienThi,
-      idSanPham
 
-    });
+    const product = await db.queryDatabase(query, [idSanPham]);
 
-    if (updateResults.changedRows > 0) {
-      res.json({ status: 'success' });
+    if (product.length > 0) {
+      res.json(product[0]);
     } else {
-      res.json({ status: 'failed' });
+      res.status(404).send('Không tìm thấy sản phẩm');
     }
   } catch (error) {
-    console.error('Errorr', error);
+    console.error('Lỗi khi lấy dữ liệu sản phẩm theo id:', error);
+    res.status(500).send('Lỗi server');
   }
-}
+};
+
+// Hàm thêm sản phẩm
+const addProduct = async (req, res) => {
+  const { tenSanPham, giaThue, trangThai, hienThi, loaiSanPham } = req.body;
+
+  try {
+    const results = await productModel.addProduct({ tenSanPham, giaThue, trangThai, loaiSanPham });
+    res.json({ id: results.insertId, message: 'Sản phẩm đã được thêm thành công' });
+  } catch (error) {
+    console.error('Lỗi khi thêm sản phẩm:', error);
+    res.status(500).send('Lỗi server');
+  }
+};
+
+// Hàm sửa thông tin sản phẩm
+const updateProduct = async (req, res) => {
+  const { idSanPham } = req.params;
+  const { tenSanPham, giaThue, trangThai, hienThi, loaiSanPham } = req.body;
+  try {
+    await productModel.updateProduct(idSanPham, { tenSanPham, giaThue, trangThai, hienThi, loaiSanPham })
+    res.json({ message: 'Thông tin sản phẩm đã được cập nhật thành công' });
+  } catch (error) {
+    console.error('Lỗi khi sửa thông tin sản phẩm:', error);
+    res.status(500).send('Lỗi server');
+  }
+};
+
+// Hàm xóa sản phẩm theo id
+const deleteProductById = async (req, res) => {
+  const { idSanPham } = req.params;
+
+  try {
+    await productModel.deleteProductById(idSanPham)
+    res.json({ message: 'Sản phẩm đã được xóa thành công' });
+  } catch (error) {
+    console.error('Lỗi khi xóa sản phẩm:', error);
+    res.status(500).send('Lỗi server');
+  }
+};
+
 module.exports = {
-  getProduct,
+  getAllProducts,
   getProductById,
-  getProductByPayment,
-  deleteProduct,
-}
+  addProduct,
+  updateProduct,
+  deleteProductById,
+};
