@@ -44,8 +44,13 @@ const insertContractDetailWithProduct = async (req, res) => {
       productID,
       contractIDTemporary
     });
+
+    // Cập nhật sản phẩm thành trạng thái "Đang thuê"
+    await contractDetailModel.updateStatusHiredIntoProductByProductID(productID);
+
     // thêm phát sinh liên quan đến sản phẩm khi thêm HĐCT với sản phẩm 
     await contracModel.insertNewIncurrent({contractDetailID,productID});
+
     res.json({ status: 'success' });
   } catch (error) {
     res.json({ status: 'error' });
@@ -88,7 +93,6 @@ const updateContractDetailContractID = async (req, res) => {
       res.json({ status: 'success' });
     } else {
       res.json({ status: 'failure' });
-
     }
   } catch (error) {
     res.json({ status: 'error' });

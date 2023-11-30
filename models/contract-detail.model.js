@@ -119,6 +119,12 @@ const insertTaskWithContractDetailService = async (contractDetailID) => {
   return await db.queryDatabase(query, [contractDetailID]);
 }
 
+// Cập nhật trạng thái sản phẩm
+const updateStatusHiredIntoProductByProductID = async (productID) => {
+  const query = `UPDATE sanpham SET trangThai = 'Đang thuê' WHERE idSanPham = ?`;
+  return await db.queryDatabase(query, [productID]);
+}
+
 module.exports = {
   getContractDetails,
   getContractDetailsByContractID,
@@ -132,5 +138,6 @@ module.exports = {
   removeContractDetailByContractDetailID,
   getServices,
   getProductsByStatusReady,
-  insertTaskWithContractDetailService
+  insertTaskWithContractDetailService,
+  updateStatusHiredIntoProductByProductID
 }
