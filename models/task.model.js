@@ -67,6 +67,12 @@ const readEmployeeByRole = async (role) => {
     return await database.queryDatabase(query, [role])
 }
 
+
+const readEmployee = async () => {
+    const query = ` SELECT * FROM NhanVien WHERE hienThi = 1`
+    return await database.queryDatabase(query, [])
+}
+
 const insertEmployeeJoin = async (idTask, idEmployee) => {
     const insertQuery = "INSERT INTO ThamGia(idCongViec, idNhanVien) VALUES(?, ?)";
     const selectQuery = "SELECT * FROM ThamGia WHERE idCongViec = ? AND idNhanVien = ?";
@@ -117,5 +123,6 @@ module.exports = {
     readEmployeeByIdHDCT,
     insertEmployeeJoin,
     deleteJoin,
-    readEmployeeByRole
+    readEmployeeByRole,
+    readEmployee
 }
