@@ -255,6 +255,12 @@ const updateIsNotOncurrentStatusContractDetail = async (idHopDongChiTiet)=>{
     WHERE idHopDongChiTiet =?;`;
     return db.queryDatabase(query,[idHopDongChiTiet]);
 }
+
+// xoá tất cả phát sinh khi không lưu hợp đồng
+const deletePhatSinhByIdHDCT = async (contractDetailID) => {
+    const query = `DELETE FROM PhatSinh WHERE idHopDongChiTiet=? `;
+    return await db.queryDatabase(query, [contractDetailID]);
+}
 module.exports = {
     getContracts,
     getContractById,
@@ -282,6 +288,7 @@ module.exports = {
     updateStatusIsOncurrentHopDong,
     updateStatusIsNotOncurrentHopDong,
     updateIsOncurrentStatusContractDetail,
-    updateIsNotOncurrentStatusContractDetail
+    updateIsNotOncurrentStatusContractDetail,
+    deletePhatSinhByIdHDCT
 
   }
