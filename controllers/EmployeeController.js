@@ -28,8 +28,9 @@ const insertEmployee = async(req, res) =>{
             anhDaiDien,
             vaiTro
         });
-        res.json({status: "SUCCESS"});
+        res.json({status: "success"});
     } catch (error) {
+        res.json({status: "error"});
         console.error("Error", error);
     }
 }
@@ -38,11 +39,21 @@ const insertEmployee = async(req, res) =>{
 const updateEmployee = async(req, res) =>{
     const idNhanVien = req.params.idNhanVien;
     const {hoVaTen, matKhau, ngaySinh, gioiTinh, dienThoai, diaChi, anhDaiDien, vaiTro} = req.body;
+    console.log(idNhanVien)
+    console.log(hoVaTen)
+    console.log(matKhau)
+    console.log(ngaySinh)
+    console.log(gioiTinh)
+    console.log(dienThoai)
+    console.log(diaChi)
+    console.log(anhDaiDien)
+    console.log(vaiTro)
+
     try {
         const updateResult = await employeeModel.updateEmployee({
-            hoVaTen, 
+            hoVaTen,
+            ngaySinh, 
             matKhau, 
-            ngaySinh,
             gioiTinh,
             dienThoai,
             diaChi,
@@ -50,16 +61,12 @@ const updateEmployee = async(req, res) =>{
             vaiTro,
             idNhanVien
         });
-
-        if(updateResult.changedRows > 0){
-            res.json({status: "SUCCESS"});
-        }else{
-            res.json({status: "FAILED"});
-        }
+        res.json({status: "success", updateResult});
     } catch (error) {
         console.error("Error", error);
     }
 }
+
 
 module.exports = {
     getAllEmployee,

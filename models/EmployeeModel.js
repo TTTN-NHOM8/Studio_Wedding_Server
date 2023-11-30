@@ -40,6 +40,7 @@ const updateEmployee = async(updateData) =>{
     return await db.queryDatabase(query, updateValues);
 }
 
+
 module.exports = {
     getAllEmployee,
     insertEmployee,
