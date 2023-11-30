@@ -173,9 +173,15 @@ const removeContractDetailByContractIDTemporary = async (req, res) => {
 const removeContractDetailByContractDetailID = async (req, res) => {
   try {
     const contractDetailID = req.params.contractDetailID;
+
+    // xoá phát sinh khi xoá hdct
     await contracModel.deletePhatSinhByIdHDCT(contractDetailID);
 
+    // xoá hdct
     const results = await contractDetailModel.removeContractDetailByContractDetailID(contractDetailID);
+
+    //todo: cập nhật lại trạng thái sp=> sẵn sàng
+    
 
     if (results.affectedRows > 0) {
       res.json({ status: 'success' });

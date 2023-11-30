@@ -97,7 +97,6 @@ const insertEmployeeJoin = async (req, res) => {
         if (!idTask || !idEmployee) {
             return res.status(400).json({ status: "error", message: " parameter is missing or empty." });
         }
-        console.log('Results',idEmployee,idTask);
 
         const results = await model.insertEmployeeJoin(idTask, idEmployee)
         res.json(results)
