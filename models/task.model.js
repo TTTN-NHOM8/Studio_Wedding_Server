@@ -86,6 +86,7 @@ const insertEmployeeJoin = async (idTask, idEmployee) => {
         const results = await database.queryDatabase(selectQuery, [idTask, idEmployee]);
 
         await database.queryDatabase("COMMIT");
+        
 
         // Trả về kết quả thành công
         return { status: "success", idTask: results[0].idThamGia }
