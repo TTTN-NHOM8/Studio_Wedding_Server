@@ -58,7 +58,6 @@ const readEmployeeByIdHDCT = async (req, res) => {
 const readEmployeeByRole = async (req, res) => {
     try {
         const { role } = req.body
-        console.log(role + "a")
         if (!role) {
             return res.status(400).json({ status: "error", message: " parameter is missing or empty." });
         }
@@ -70,6 +69,22 @@ const readEmployeeByRole = async (req, res) => {
         } else {
             res.json({ status: "not found", employeeList: results })
         }
+    } catch (error) {
+        res.status(500).json({ status: "error", error: error.message });
+    }
+}
+
+const readEmployee = async (req, res) => {
+    try {
+
+        const results = await model.readEmployee()
+
+        if (results.length > 0) {
+            res.json({ status: "success", employeeList: results })
+        } else {
+            res.json({ status: "not found", employeeList: results })
+        }
+
     } catch (error) {
         res.status(500).json({ status: "error", error: error.message });
     }
@@ -149,5 +164,6 @@ module.exports = {
     readEmployeeByIdHDCT,
     insertEmployeeJoin,
     deleteJoin,
-    readEmployeeByRole
+    readEmployeeByRole,
+    readEmployee
 }
