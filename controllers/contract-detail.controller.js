@@ -175,6 +175,7 @@ const removeContractDetailByContractDetailID = async (req, res) => {
     const contractDetailID = req.params.contractDetailID;
     const results = await contractDetailModel.removeContractDetailByContractDetailID(contractDetailID);
 
+    await contracModel.deletePhatSinhByIdHDCT(contractDetailID);
     if (results.affectedRows > 0) {
       res.json({ status: 'success' });
     } else {
