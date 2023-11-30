@@ -1,4 +1,5 @@
 const contractDetailModel = require('../models/contract-detail.model.js');
+const contracModel=require('../models/contract-model');
 
 // Lấy tất cả danh sách HĐCT
 const getContractDetails = async (req, res) => {
@@ -43,8 +44,12 @@ const insertContractDetailWithProduct = async (req, res) => {
       productID,
       contractIDTemporary
     });
+
     // Cập nhật sản phẩm thành trạng thái "Đang thuê"
     await contractDetailModel.updateStatusHiredIntoProductByProductID(productID);
+
+    // thêm phát sinh liên quan đến sản phẩm khi thêm HĐCT với sản phẩm 
+    await contracModel.insertNewIncurrent({contractDetailID,productID});
 
     res.json({ status: 'success' });
   } catch (error) {
@@ -146,9 +151,12 @@ const removeContractDetailByContractIDTemporary = async (req, res) => {
   try {
     const contractIDTemporary = req.params.contractIDTemporary;
     console.log("🚀 ~ file: contract-detail.controller.js:142 ~ removeContractDetailByContractIDTemporary ~ contractIDTemporary:", contractIDTemporary)
+    // xoá phát sinh khi không lưu hợp đồng
+    const deleteIncurrentResult= await contracModel.deletePhatSinhByContractIDTemporary(contractIDTemporary);
+  
     const results = await contractDetailModel.removeContractDetailByContractIDTemporary(contractIDTemporary);
 
-    if (results.affectedRows > 0) {
+    if (results.affectedRows > 0 && deleteIncurrentResult>0) {
       res.json({ status: 'success' });
       console.log('Success');
     } else {
