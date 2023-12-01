@@ -6,12 +6,13 @@ const con = mysql.createConnection({
     user: process.env.DB_USER,
     port: process.env.DB_PORT,
     database: process.env.DB_NAME,
+
 });
 
-// con.connect(function (err) {
-//     if (err) throw err;
-//     console.log("Kết nối Database thành công!");
-// });
+con.connect(function (err) {
+    if (err) throw err;
+    console.log("Kết nối Database thành công!");
+});
 
 
 const queryDatabase = (query, values) => {

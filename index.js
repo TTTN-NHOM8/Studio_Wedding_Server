@@ -1,12 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+
 const exampleRouter = require('./routers/example.router.js');
 const accountRouters = require('./routers/account.routers.js');
 const routeContract=require('./routers/contract.router.js');
 const contractDetailRouter = require('./routers/contract-detail.router.js');
 const taskRouter = require('./routers/task.router.js');
 const serviceRouter = require('./routers/service.router.js');
+const routeProduct=require('./routers/router-product.js'); 
+const employeeRouter =require('./routers/EmployeeRouter.js'); 
 
 
 // body-parser
@@ -23,8 +26,11 @@ app.use('/api', exampleRouter);
 app.use('/api', accountRouters)
 app.use('/api',routeContract);
 app.use('/api', contractDetailRouter);
+app.use('/api', routeProduct);
 app.use('/api', taskRouter);
 app.use('/api', serviceRouter);
+app.use('/api', employeeRouter);
+
 
 
 
