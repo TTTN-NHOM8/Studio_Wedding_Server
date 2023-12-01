@@ -4,15 +4,15 @@ const mysql = require('mysql');
 const con = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
+    password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
 });
 
-con.connect(function (err) {
-    if (err) throw err;
-    console.log("Kết nối Database thành công!");
-});
+// con.connect(function (err) {
+//     if (err) throw err;
+//     console.log("Kết nối Database thành công!");
+// });
 
 
 const queryDatabase = (query, values) => {
@@ -20,8 +20,10 @@ const queryDatabase = (query, values) => {
         con.query(query, values, (err, results, fields) => {
             if (err) {
                 reject(err);
+                console.log("Lỗi kết nối Database!");
                 return;
             } 
+            console.log("Kết nối Database thành công!");
             resolve(results);
         });
     });
