@@ -95,7 +95,6 @@ const getDailymonth = async (thang) => {
         MONTH(ngayThanhToan) = ? AND YEAR(ngayThanhToan) = ?;
     `;
 
-    // Use getUTCMonth() and getUTCFullYear() to ensure correct results
     const result = await db.queryDatabase(getRevenueQuery, [
       thangDate.getUTCMonth() + 1,
       thangDate.getUTCFullYear(),

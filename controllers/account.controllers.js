@@ -107,8 +107,6 @@ const Getthongtin = async (req, res) => {
 const GetDailyRevenueController = async (req, res) => {
   try {
     const { ngay } = req.params;
-
-    // Gọi hàm getDailyRevenue từ mô hình accountmodels
     const totalRevenue = await accountmodels.getDailyRevenue(ngay);
 
     res.json({ status: "success", totalRevenue });
@@ -142,8 +140,6 @@ const GetDailyRevenueControllerMonth = async (req, res) => {
 const GetDailyRevenueControllerYert = async (req, res) => {
   try {
     const { nam } = req.params;
-
-    // Gọi hàm getDailymonth từ mô hình accountmodels
     const doanhthunam = await accountmodels.getDailyyerd(nam);
     res.json({ status: "success", doanhthunam });
   } catch (error) {
