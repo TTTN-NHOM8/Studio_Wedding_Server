@@ -31,10 +31,10 @@ const getProductById = async (req, res) => {
 
 // Hàm thêm sản phẩm
 const addProduct = async (req, res) => {
-  const { tenSanPham, giaThue, trangThai, hienThi, loaiSanPham } = req.body;
+  const { tenSanPham, giaThue, trangThai, hienThi, loaiSanPham, anhSanPham } = req.body;
 
   try {
-    const results = await productModel.addProduct({ tenSanPham, giaThue, trangThai, loaiSanPham });
+    const results = await productModel.addProduct({ tenSanPham, giaThue, trangThai, loaiSanPham, hienThi: 1, anhSanPham });
     res.json({ id: results.insertId, message: 'Sản phẩm đã được thêm thành công' });
   } catch (error) {
     console.error('Lỗi khi thêm sản phẩm:', error);
@@ -67,11 +67,26 @@ const deleteProductById = async (req, res) => {
     res.status(500).send('Lỗi server');
   }
 };
-
+// Hàm lấy một sản phẩm theo tenSanPham
+const getProductByName = async (req, res) => {
+  const name = req.query.q;
+  try {
+    const product = await productModel.getAllProductsByName(name)
+    if (product.length > 0) {
+      res.json(product);
+    } else {
+      res.status(404).send('Không tìm thấy sản phẩm');
+    }
+  } catch (error) {
+    console.error('Lỗi khi lấy dữ liệu sản phẩm theo id:', error);
+    res.status(500).send('Lỗi server');
+  }
+};
 module.exports = {
   getAllProducts,
   getProductById,
   addProduct,
   updateProduct,
   deleteProductById,
+  getProductByName
 };
