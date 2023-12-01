@@ -1,5 +1,5 @@
 const contractDetailModel = require('../models/contract-detail.model.js');
-const contracModel=require('../models/contract-model');
+const contracModel = require('../models/contract-model');
 
 // Lấy tất cả danh sách HĐCT
 const getContractDetails = async (req, res) => {
@@ -49,7 +49,7 @@ const insertContractDetailWithProduct = async (req, res) => {
     await contractDetailModel.updateStatusHiredIntoProductByProductID(productID);
 
     // thêm phát sinh liên quan đến sản phẩm khi thêm HĐCT với sản phẩm 
-    await contracModel.insertNewIncurrent({contractDetailID,productID});
+    await contracModel.insertNewIncurrent({ contractDetailID, productID });
 
     res.json({ status: 'success' });
   } catch (error) {
@@ -146,17 +146,21 @@ const updateContractDetailWithService = async (req, res) => {
   }
 }
 
-// Xoá HĐCT theo mã HĐ tạm thời
+// Xoá HĐCT theo mã HĐ tạm thời 
 const removeContractDetailByContractIDTemporary = async (req, res) => {
   try {
     const contractIDTemporary = req.params.contractIDTemporary;
-    console.log("🚀 ~ file: contract-detail.controller.js:142 ~ removeContractDetailByContractIDTemporary ~ contractIDTemporary:", contractIDTemporary)
     // xoá phát sinh khi không lưu hợp đồng
-    const deleteIncurrentResult= await contracModel.deletePhatSinhByContractIDTemporary(contractIDTemporary);
-  
+    const deleteIncurrentResult = await contracModel.deletePhatSinhByContractIDTemporary(contractIDTemporary);
+
+    // Xoá hợp đồng chi tiết có mã HĐ tạm thời
     const results = await contractDetailModel.removeContractDetailByContractIDTemporary(contractIDTemporary);
 
-    if (results.affectedRows > 0 && deleteIncurrentResult>0) {
+    // TODO: nếu là sẩn phẩm thì sẽ cập nhật lại ss
+    // TODO: Xoá công việc
+    // TODO: Xoá phát sinh
+
+    if (results.affectedRows > 0 && deleteIncurrentResult > 0) {
       res.json({ status: 'success' });
       console.log('Success');
     } else {
@@ -173,15 +177,19 @@ const removeContractDetailByContractIDTemporary = async (req, res) => {
 const removeContractDetailByContractDetailID = async (req, res) => {
   try {
     const contractDetailID = req.params.contractDetailID;
+    const productID = req.body.productID;
+    
+    // Xoá công việc theo mã HĐCT
+    await contractDetailModel.deleteTaskByContractDetailID(contractDetailID);
 
-    // xoá phát sinh khi xoá hdct
+    // Cập nhật sản phẩm thành trạng thái "Sẵn sàng"
+    await contractDetailModel.updateStatusReadyIntoProductByProductID(productID);
+
+    // Xoá phát sinh hợp đồng
     await contracModel.deletePhatSinhByIdHDCT(contractDetailID);
 
-    // xoá hdct
+    // Xoá HĐCT
     const results = await contractDetailModel.removeContractDetailByContractDetailID(contractDetailID);
-
-    //todo: cập nhật lại trạng thái sp=> sẵn sàng
-    
 
     if (results.affectedRows > 0) {
       res.json({ status: 'success' });
