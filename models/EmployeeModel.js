@@ -2,7 +2,7 @@ const db = require ('../database/database');
 
 //Lấy tất cả danh sách nhân viên từ database
 const getAllEmployee = async () =>{
-    const query = "SELECT * FROM nhanvien WHERE hienThi = 1"
+    const query = "SELECT * FROM nhanvien WHERE hienThi = 1 AND vaiTro != 'Quản Lý'"
     return await db.queryDatabase(query,[])
 }
 
