@@ -59,7 +59,7 @@ const readEmployeeByIdTask = async (idTask) => {
     const query = "SELECT nhanvien.* " +
         "FROM nhanvien " +
         "LEFT JOIN thamgia ON nhanvien.idNhanVien = thamgia.idNhanVien AND thamgia.idCongViec = ? " +
-        "WHERE thamgia.idNhanVien IS NULL "
+        "WHERE thamgia.idNhanVien IS NULL AND nhanvien.vaiTro != 'Quản Lý'"
 
 
     return await database.queryDatabase(query, [idTask])
