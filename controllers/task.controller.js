@@ -17,7 +17,7 @@ const readTask = async (req, res) => {
 
 const readTaskByRole = async (req, res) => {
     try {
-        const { role } = req.query
+        const { role } = req.body
 
         if (!role) {
             return res.status(400).json({ status: "error", message: "'role' parameter is missing or empty." });

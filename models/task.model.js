@@ -21,9 +21,13 @@ const readTask = async () => {
     return await database.queryDatabase(query, [])
 }
 
-const readTaskByRole = (role) => {
+const readTaskByRole = async (role) => {
+
     const query = "SELECT " +
+        "c.idCongViec, " +
         "hdct.idHopDong, " +
+        "hdct.idHopDongChiTiet, " +
+        "nv.vaiTro, " +
         "MAX(ngayThucHien) AS ngayThucHien, " +
         "MAX(trangThaiCongViec) AS trangThaiCongViec, " +
         "MAX(tenDichVu) AS tenDichVu, " +
@@ -34,14 +38,14 @@ const readTaskByRole = (role) => {
         "LEFT JOIN db_wedding.hopdongchitiet hdct ON c.idHDCT = hdct.idHopDongChiTiet " +
         "LEFT JOIN db_wedding.dichvu d ON hdct.idDichVu = d.idDichVu " +
         "LEFT JOIN db_wedding.nhanvien nv ON t.idNhanVien = nv.idNhanVien " +
-        "WHERE nv.vaiTro = ? AND c.hienThi = 1 " +
+        "WHERE c.hienThi = 1 AND nv.vaiTro = ? " +
         "GROUP BY idHopDongChiTiet "
 
-    return database.queryDatabase(query, [role])
+    return await database.queryDatabase(query, [role])
 }
 
 const readEmployeeByIdHDCT = async (idHDCT) => {
-    const query = "SELECT nv.idNhanVien, nv.hoVaTen, nv.vaiTro, t.idThamGia " +
+    const query = "SELECT nv.*, t.idThamGia " +
         "FROM db_wedding.congviec c " +
         "LEFT JOIN db_wedding.thamgia t ON t.idCongViec = c.idCongViec " +
         "LEFT JOIN db_wedding.hopdongchitiet hdct ON c.idHDCT = hdct.idHopDongChiTiet " +
@@ -55,7 +59,7 @@ const readEmployeeByIdTask = async (idTask) => {
     const query = "SELECT nhanvien.* " +
         "FROM nhanvien " +
         "LEFT JOIN thamgia ON nhanvien.idNhanVien = thamgia.idNhanVien AND thamgia.idCongViec = ? " +
-        "WHERE thamgia.idNhanVien IS NULL "
+        "WHERE thamgia.idNhanVien IS NULL AND nhanvien.vaiTro != 'Quản Lý'"
 
 
     return await database.queryDatabase(query, [idTask])
