@@ -202,6 +202,15 @@ const updateIncurrent = async (data) => {
     return db.queryDatabase(query, updateValues);
 }
 
+// Cập nhật phát sinh hienThi=0;
+const updateIncurrentVisibleNone = async (data) => {
+    const query = `UPDATE phatsinh SET hienThi=0, ngayHoanThanh=NOW()  WHERE idPhatSinh=?`;
+    const updateValues = [
+        data.idPhatSinh
+    ];
+    return db.queryDatabase(query, updateValues);
+}
+
 // [Xoá]cập nhật lại toàn bộ phát sinh bằng null
 const updateIncurrentNone = async (idPhatSinh) => {
     const query = `UPDATE phatsinh SET noiDung=null, hanTra=null, phiPhatSinh=null WHERE idPhatSinh=?`;
@@ -289,6 +298,7 @@ module.exports = {
     updateStatusIsNotOncurrentHopDong,
     updateIsOncurrentStatusContractDetail,
     updateIsNotOncurrentStatusContractDetail,
-    deletePhatSinhByIdHDCT
+    deletePhatSinhByIdHDCT,
+    updateIncurrentVisibleNone
 
   }
