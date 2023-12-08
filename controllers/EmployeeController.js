@@ -38,10 +38,9 @@ const insertEmployee = async(req, res) =>{
 //Cập nhật nhân viên
 const updateEmployee = async(req, res) =>{
     const idNhanVien = req.params.idNhanVien;
-    const {hoVaTen, matKhau, ngaySinh, gioiTinh, dienThoai, diaChi, anhDaiDien, vaiTro} = req.body;
+    const {hoVaTen, ngaySinh, gioiTinh, dienThoai, diaChi, anhDaiDien, vaiTro} = req.body;
     console.log(idNhanVien)
     console.log(hoVaTen)
-    console.log(matKhau)
     console.log(ngaySinh)
     console.log(gioiTinh)
     console.log(dienThoai)
@@ -53,7 +52,6 @@ const updateEmployee = async(req, res) =>{
         const updateResult = await employeeModel.updateEmployee({
             hoVaTen,
             ngaySinh, 
-            matKhau, 
             gioiTinh,
             dienThoai,
             diaChi,
@@ -66,10 +64,24 @@ const updateEmployee = async(req, res) =>{
         console.error("Error", error);
     }
 }
-
+//Xóa nhân viên
+const deleteEmployee = async(req, res) =>{
+    try {
+        const {idNhanVien} = req.body;
+        
+        if(!idNhanVien){
+            return res.status(400).json({status: "error", message: "parameter is missing or empty."});
+        }
+        const results = await employeeModel.deleteEmployee(idNhanVien)
+        res.json({status: "success", results});
+    } catch (error) {
+        res.status(500).json({status: "error", error: error.message})
+    }
+}
 
 module.exports = {
     getAllEmployee,
     insertEmployee,
-    updateEmployee
+    updateEmployee,
+    deleteEmployee
 }
