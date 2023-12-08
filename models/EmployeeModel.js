@@ -25,10 +25,9 @@ const insertEmployee = async(data) =>{
 
 //Cập nhật nhân viên theo mã nhân viên
 const updateEmployee = async(updateData) =>{
-    const query = "UPDATE nhanvien SET hoVaTen = ?,matKhau = ?, ngaySinh =?, gioiTinh = ?, dienThoai = ?, diaChi = ?, anhDaiDien = ?, vaiTro = ? WHERE idNhanVien = ?"
+    const query = "UPDATE nhanvien SET hoVaTen = ?, ngaySinh =?, gioiTinh = ?, dienThoai = ?, diaChi = ?, anhDaiDien = ?, vaiTro = ? WHERE idNhanVien = ?"
     const updateValues = [
         updateData.hoVaTen,
-        updateData.matKhau,
         updateData.ngaySinh,
         updateData.gioiTinh,
         updateData.dienThoai,
@@ -40,9 +39,16 @@ const updateEmployee = async(updateData) =>{
     return await db.queryDatabase(query, updateValues);
 }
 
+//Xóa nhân viên theo mã nhân viên
+const deleteEmployee = (id) =>{
+    const query = "UPDATE nhanvien SET hienthi = 0 WHERE idNhanVien = ?"
+    return db.queryDatabase(query, [id])
+}
+
 
 module.exports = {
     getAllEmployee,
     insertEmployee,
-    updateEmployee
+    updateEmployee,
+    deleteEmployee
 }
