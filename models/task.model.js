@@ -21,7 +21,7 @@ const readTask = async () => {
     return await database.queryDatabase(query, [])
 }
 
-const readTaskByRole = async (role) => {
+const readTaskByIdEmployee = async (idEmployee) => {
 
     const query = "SELECT " +
         "c.idCongViec, " +
@@ -38,10 +38,10 @@ const readTaskByRole = async (role) => {
         "LEFT JOIN db_wedding.hopdongchitiet hdct ON c.idHDCT = hdct.idHopDongChiTiet " +
         "LEFT JOIN db_wedding.dichvu d ON hdct.idDichVu = d.idDichVu " +
         "LEFT JOIN db_wedding.nhanvien nv ON t.idNhanVien = nv.idNhanVien " +
-        "WHERE c.hienThi = 1 AND nv.vaiTro = ? " +
+        "WHERE c.hienThi = 1 AND nv.idNhanVien = ? " +
         "GROUP BY idHopDongChiTiet "
 
-    return await database.queryDatabase(query, [role])
+    return await database.queryDatabase(query, [idEmployee])
 }
 
 const readEmployeeByIdHDCT = async (idHDCT) => {
@@ -118,15 +118,44 @@ const deleteTask = async (id) => {
     return await database.queryDatabase(query, [id])
 }
 
-const updateTask = async (id, statusTask) => {
+const updateTask = async (id, statusTask, idHDCT, idHD) => {
     const query = "UPDATE CongViec SET trangThaiCongViec = ? WHERE idCongViec = ?"
-    return await database.queryDatabase(query, [statusTask, id])
+    const checkAllCongViecDoneQuery = "SELECT COUNT(*) AS count FROM CongViec c " +
+        "LEFT JOIN db_wedding.hopdongchitiet hdct ON c.idHDCT = hdct.idHopDongChiTiet " +
+        "WHERE hdct.idHopDong = ? AND trangThaiCongViec != 'Đã xong'";
+    const updateHopDongQuery = "UPDATE HopDong SET trangThaiHopDong = 'Đã hoàn thành' WHERE idHopDong = ?";
+
+    try {
+        // Bắt đầu giao dịch
+        await database.queryDatabase("START TRANSACTION");
+
+        await database.queryDatabase(query, [statusTask, id])
+
+        const results = await database.queryDatabase(checkAllCongViecDoneQuery, [idHD])
+
+        console.log(results[0].count + "a")
+
+        if (results[0].count == 0) {
+            await database.queryDatabase(updateHopDongQuery, [idHD])
+        }
+
+        await database.queryDatabase("COMMIT");
+
+        // Trả về kết quả thành công
+        return { status: "success", results }
+
+    } catch (err) {
+        // Rollback giao dịch nếu có lỗi
+        await database.queryDatabase("ROLLBACK");
+        // Trả về kết quả lỗi và thông điệp lỗi
+        return { status: "ERROR", err };
+    }
 }
 
 
 module.exports = {
     readTask,
-    readTaskByRole,
+    readTaskByIdEmployee,
     deleteTask,
     updateTask,
     readEmployeeByIdHDCT,

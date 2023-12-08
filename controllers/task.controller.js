@@ -15,15 +15,15 @@ const readTask = async (req, res) => {
     }
 }
 
-const readTaskByRole = async (req, res) => {
+const readTaskByIdEmployee = async (req, res) => {
     try {
-        const { role } = req.body
+        const { idEmployee } = req.body
 
-        if (!role) {
-            return res.status(400).json({ status: "error", message: "'role' parameter is missing or empty." });
+        if (!idEmployee) {
+            return res.status(400).json({ status: "error", message: "parameter is missing or empty." });
         }
 
-        const results = await model.readTaskByRole(role)
+        const results = await model.readTaskByIdEmployee(idEmployee)
 
         if (results.length > 0) {
             res.json({ status: "success", taskList: results })
@@ -111,14 +111,14 @@ const updateTask = async (req, res) => {
 
     try {
         const id = req.params.id;
-        const { statusTask } = req.body
+        const { statusTask, idHDCT, idHD } = req.body
 
-        if (!id || !statusTask) {
-            return res.status(400).json({ status: "error", message: "parameter is missing or empty." });
-        }
+        // if (!id || !statusTask) {
+        //     return res.status(400).json({ status: "error", message: "parameter is missing or empty." });
+        // }
 
-        const results = await model.updateTask(id, statusTask)
-        res.json({ status: "success", results })
+        const results = await model.updateTask(id, statusTask, idHDCT, idHD)
+        res.json(results)
     } catch (error) {
         res.status(500).json({ status: "error", error: error.message });
     }
@@ -160,7 +160,7 @@ const deleteTask = async (req, res) => {
 }
 module.exports = {
     readTask,
-    readTaskByRole,
+    readTaskByIdEmployee,
     updateTask,
     deleteTask,
     readEmployeeByIdHDCT,

@@ -5,7 +5,7 @@ router.get("/tasks", controller.readTask)
 router.get("/task/employees", controller.readEmployee)
 router.get("/employees/:idHDCT", controller.readEmployeeByIdHDCT)
 
-router.post("/tasks/role", controller.readTaskByRole)
+router.post("/tasks/id/employee", controller.readTaskByIdEmployee)
 router.post("/join/task/employees", controller.readEmployeeByIdTask)
 router.post("/insert/employee", controller.insertEmployeeJoin)
 
