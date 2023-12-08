@@ -3,10 +3,10 @@ const controller = require('../controllers/task.controller.js')
 
 router.get("/tasks", controller.readTask)
 router.get("/task/employees", controller.readEmployee)
-router.get("/tasks/role", controller.readTaskByRole)
 router.get("/employees/:idHDCT", controller.readEmployeeByIdHDCT)
 
-router.post("/role/employees", controller.readEmployeeByRole)
+router.post("/tasks/role", controller.readTaskByRole)
+router.post("/join/task/employees", controller.readEmployeeByIdTask)
 router.post("/insert/employee", controller.insertEmployeeJoin)
 
 router.put("/update/task/:id", controller.updateTask)

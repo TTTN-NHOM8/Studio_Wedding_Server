@@ -17,7 +17,7 @@ const readTask = async (req, res) => {
 
 const readTaskByRole = async (req, res) => {
     try {
-        const { role } = req.query
+        const { role } = req.body
 
         if (!role) {
             return res.status(400).json({ status: "error", message: "'role' parameter is missing or empty." });
@@ -55,14 +55,16 @@ const readEmployeeByIdHDCT = async (req, res) => {
     }
 }
 
-const readEmployeeByRole = async (req, res) => {
+const readEmployeeByIdTask = async (req, res) => {
     try {
-        const { role } = req.body
-        if (!role) {
+        const { idTask } = req.body
+        console.log(idTask + "a")
+
+        if (!idTask) {
             return res.status(400).json({ status: "error", message: " parameter is missing or empty." });
         }
 
-        const results = await model.readEmployeeByRole(role)
+        const results = await model.readEmployeeByIdTask(idTask)
 
         if (results.length > 0) {
             res.json({ status: "success", employeeList: results })
@@ -164,6 +166,6 @@ module.exports = {
     readEmployeeByIdHDCT,
     insertEmployeeJoin,
     deleteJoin,
-    readEmployeeByRole,
+    readEmployeeByIdTask,
     readEmployee
 }

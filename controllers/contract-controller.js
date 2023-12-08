@@ -112,10 +112,7 @@ const updateIncurrentNone= async(req,res) => {
   const { noiDung, hanTra, phiPhatSinh, idSanPham,idHopDong ,idHopDongChiTiet} = req.body;
   
   try {
-      const updateResults = await contractModel.updateIncurrent({
-          noiDung,
-          hanTra,
-          phiPhatSinh,
+      const updateResults = await contractModel.updateIncurrentVisibleNone({
           idPhatSinh
       });
       await contractModel.updateProductStatusNoneByID(idSanPham);
