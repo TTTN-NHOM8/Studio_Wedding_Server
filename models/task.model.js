@@ -118,9 +118,38 @@ const deleteTask = async (id) => {
     return await database.queryDatabase(query, [id])
 }
 
-const updateTask = async (id, statusTask) => {
+const updateTask = async (id, statusTask, idHDCT, idHD) => {
     const query = "UPDATE CongViec SET trangThaiCongViec = ? WHERE idCongViec = ?"
-    return await database.queryDatabase(query, [statusTask, id])
+    const checkAllCongViecDoneQuery = "SELECT COUNT(*) AS count FROM CongViec c " +
+        "LEFT JOIN db_wedding.hopdongchitiet hdct ON c.idHDCT = hdct.idHopDongChiTiet " +
+        "WHERE hdct.idHopDong = ? AND trangThaiCongViec != 'Đã xong'";
+    const updateHopDongQuery = "UPDATE HopDong SET trangThaiHopDong = 'Đã hoàn thành' WHERE idHopDong = ?";
+
+    try {
+        // Bắt đầu giao dịch
+        await database.queryDatabase("START TRANSACTION");
+
+        await database.queryDatabase(query, [statusTask, id])
+
+        const results = await database.queryDatabase(checkAllCongViecDoneQuery, [idHD])
+
+        console.log(results[0].count + "a")
+
+        if (results[0].count == 0) {
+            await database.queryDatabase(updateHopDongQuery, [idHD])
+        }
+
+        await database.queryDatabase("COMMIT");
+
+        // Trả về kết quả thành công
+        return { status: "success", results }
+
+    } catch (err) {
+        // Rollback giao dịch nếu có lỗi
+        await database.queryDatabase("ROLLBACK");
+        // Trả về kết quả lỗi và thông điệp lỗi
+        return { status: "ERROR", err };
+    }
 }
 
 

@@ -111,14 +111,14 @@ const updateTask = async (req, res) => {
 
     try {
         const id = req.params.id;
-        const { statusTask } = req.body
+        const { statusTask, idHDCT, idHD } = req.body
 
-        if (!id || !statusTask) {
-            return res.status(400).json({ status: "error", message: "parameter is missing or empty." });
-        }
+        // if (!id || !statusTask) {
+        //     return res.status(400).json({ status: "error", message: "parameter is missing or empty." });
+        // }
 
-        const results = await model.updateTask(id, statusTask)
-        res.json({ status: "success", results })
+        const results = await model.updateTask(id, statusTask, idHDCT, idHD)
+        res.json(results)
     } catch (error) {
         res.status(500).json({ status: "error", error: error.message });
     }
