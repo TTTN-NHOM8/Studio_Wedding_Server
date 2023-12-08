@@ -21,7 +21,7 @@ const readTask = async () => {
     return await database.queryDatabase(query, [])
 }
 
-const readTaskByRole = async (role) => {
+const readTaskByIdEmployee = async (idEmployee) => {
 
     const query = "SELECT " +
         "c.idCongViec, " +
@@ -38,10 +38,10 @@ const readTaskByRole = async (role) => {
         "LEFT JOIN db_wedding.hopdongchitiet hdct ON c.idHDCT = hdct.idHopDongChiTiet " +
         "LEFT JOIN db_wedding.dichvu d ON hdct.idDichVu = d.idDichVu " +
         "LEFT JOIN db_wedding.nhanvien nv ON t.idNhanVien = nv.idNhanVien " +
-        "WHERE c.hienThi = 1 AND nv.vaiTro = ? " +
+        "WHERE c.hienThi = 1 AND nv.idNhanVien = ? " +
         "GROUP BY idHopDongChiTiet "
 
-    return await database.queryDatabase(query, [role])
+    return await database.queryDatabase(query, [idEmployee])
 }
 
 const readEmployeeByIdHDCT = async (idHDCT) => {
@@ -126,7 +126,7 @@ const updateTask = async (id, statusTask) => {
 
 module.exports = {
     readTask,
-    readTaskByRole,
+    readTaskByIdEmployee,
     deleteTask,
     updateTask,
     readEmployeeByIdHDCT,
