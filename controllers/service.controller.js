@@ -18,11 +18,18 @@ const getServices = async (req, res) => {
 const insertService = async (req, res) => {
   const { serviceName, servicePrice } = req.body;
   try {
-    await serviceModel.insertService({
-      serviceName,
-      servicePrice
-    });
-    res.json({ status: 'success' });
+    const services = await serviceModel.getServices();
+    const isServiceNameExists = services.some((service) => service.tenDichVu === serviceName);
+
+    if (isServiceNameExists) {
+      res.json({ status: 'exists' });
+    } else {
+      await serviceModel.insertService({
+        serviceName,
+        servicePrice
+      });
+      res.json({ status: 'success' });
+    }
   } catch (error) {
     res.json({ status: 'error' });
     console.error('Insert service failed', error);
@@ -39,8 +46,8 @@ const updateService = async (req, res) => {
       servicePrice,
       serviceID
     });
-    
-    if(results.changedRows > 0) {
+
+    if (results.changedRows > 0) {
       res.json({ status: 'success' });
     } else {
       res.json({ status: 'failure' });
@@ -56,8 +63,8 @@ const removeService = async (req, res) => {
   const serviceID = req.params.serviceID;
   try {
     const results = await serviceModel.removeService(serviceID);
-    
-    if(results.changedRows > 0) {
+
+    if (results.changedRows > 0) {
       res.json({ status: 'success' });
     } else {
       res.json({ status: 'failure' });
